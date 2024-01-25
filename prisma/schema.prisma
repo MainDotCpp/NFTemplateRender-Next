@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Page {
+  id         Int       @id @default(autoincrement())
+  sort       Int       @default(0)
+  name       String    @db.VarChar(255)
+  cover      String    @db.VarChar(255)
+  baseImgUrl String    @db.VarChar(255)
+  width      Int       @default(0)
+  height     Int       @default(0)
+  templateId Int?
+  content    String
+  config     Json?     @db.Json
+  Template   Template? @relation(fields: [templateId], references: [id])
+}
+
+model Template {
+  id    Int    @id @default(autoincrement())
+  name  String @db.VarChar(255)
+  cover String @db.VarChar(255)
+  Page  Page[]
+}
